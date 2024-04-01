@@ -35,7 +35,7 @@ variable "audit_account_id" {
 
 variable "aft_framework_repo_url" {
   description = "Git repo URL where the AFT framework should be sourced from"
-  default     = "https://github.com/aws-ia/terraform-aws-control_tower_account_factory.git"
+  default     = "https://github.com/Elevaso/terraform-aws-control_tower_account_factory.git"
   type        = string
   validation {
     condition     = length(var.aft_framework_repo_url) > 0
@@ -336,6 +336,16 @@ variable "terraform_api_endpoint" {
   validation {
     condition     = length(var.terraform_api_endpoint) > 0
     error_message = "Variable var: terraform_api_endpoint cannot be empty."
+  }
+}
+
+variable "terraform_project_name" {
+  type        = string
+  description = "Project name for creating workspaces in Terraform Cloud or Enterprise"
+  default     = "Default Project"
+  validation {
+    condition     = length(var.terraform_org_name) > 0
+    error_message = "Variable var: terraform_org_name cannot be empty."
   }
 }
 

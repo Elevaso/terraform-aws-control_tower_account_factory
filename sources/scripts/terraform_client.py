@@ -37,7 +37,7 @@ def check_workspace_exists(organization_name, workspace_name, api_token):
     return None
 
 
-def create_workspace(organization_name, workspace_name, api_token):
+def create_workspace(organization_name, workspace_name, api_token, project_name):
     workspace_id = check_workspace_exists(organization_name, workspace_name, api_token)
     if workspace_id:
         return workspace_id
@@ -46,6 +46,12 @@ def create_workspace(organization_name, workspace_name, api_token):
             TERRAFORM_API_ENDPOINT, organization_name
         )
         headers = __build_standard_headers(api_token)
+
+        if project_name:
+            project_id = get_project(organization_name, project_name, api_token)
+        else:
+            project_id = None
+
         payload = {
             "data": {
                 "attributes": {
@@ -54,10 +60,30 @@ def create_workspace(organization_name, workspace_name, api_token):
                     "auto-apply": True,
                 },
                 "type": "workspaces",
+                "relationships": {
+                    "project": {
+                        "data": {
+                            "id": project_id
+                        }
+                    }
+                }
             }
         }
         response = __post(endpoint, headers, payload)
         return response["data"]["id"]
+    
+def get_project(organization_name, project_name, api_token):
+        endpoint = "{}/organizations/{}/projects?q={}".format(
+            TERRAFORM_API_ENDPOINT, organization_name, project_name
+        )
+        headers = __build_standard_headers(api_token)
+
+        response = __get(endpoint, headers)
+        
+        if len(response["data"]) == 1:
+            return response["data"][0]["id"]
+        else:
+            raise Exception(f"No projects with name {project_name} found")
 
 
 def create_configuration_version(workspace_id, api_token):
