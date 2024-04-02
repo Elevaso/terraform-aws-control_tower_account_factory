@@ -7,7 +7,7 @@ footer-from: ""
 
 sections:
   hide: []
-  show: [requirements, providers, inputs, modules, resources, outputs]
+  show: [data-sources, requirements, providers, inputs, modules, resources, outputs]
 
 output:
   file: README.md
