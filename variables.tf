@@ -344,8 +344,8 @@ variable "terraform_project_name" {
   description = "Project name for creating workspaces in Terraform Cloud or Enterprise"
   default     = "Default Project"
   validation {
-    condition     = length(var.terraform_org_name) > 0
-    error_message = "Variable var: terraform_org_name cannot be empty."
+    condition     = length(var.terraform_project_name) > 0
+    error_message = "Variable var: terraform_project_name cannot be empty."
   }
 }
 
